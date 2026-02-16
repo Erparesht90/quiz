@@ -45,42 +45,44 @@ exports.createAdmin = async (req, res) => {
         await db.query('INSERT INTO admins (username, password) VALUES (?, ?)', [username, hashedPassword]);
         res.status(201).json({ message: 'Admin created' });
     } catch (error) {
-        // Get all quiz settings
-        exports.getSettings = async (req, res) => {
-            try {
-                const [settings] = await db.query('SELECT * FROM quiz_settings');
-                res.json(settings);
-            } catch (error) {
-                res.status(500).json({ error: 'Internal Server Error' });
-            }
-        };
+        res.status(500).json({ error: error.message });
+    }
+};
 
-        // Update quiz settings
-        exports.updateSettings = async (req, res) => {
-            const { mode } = req.params;
-            const { min_number, max_number, question_count, time_limit } = req.body;
+// Get all quiz settings
+exports.getSettings = async (req, res) => {
+    try {
+        const [settings] = await db.query('SELECT * FROM quiz_settings');
+        res.json(settings);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
-            try {
-                await db.query(
-                    'UPDATE quiz_settings SET min_number = ?, max_number = ?, question_count = ?, time_limit = ? WHERE mode = ?',
-                    [min_number, max_number, question_count, time_limit, mode]
-                );
-                res.json({ message: 'Settings updated successfully' });
-            } catch (error) {
-                res.status(500).json({ error: 'Internal Server Error' });
-            }
-        };
+// Update quiz settings
+exports.updateSettings = async (req, res) => {
+    const { mode } = req.params;
+    const { min_number, max_number, question_count, time_limit } = req.body;
 
-        // Toggle quiz mode
-        exports.toggleQuizMode = async (req, res) => {
-            const { mode } = req.params;
+    try {
+        await db.query(
+            'UPDATE quiz_settings SET min_number = ?, max_number = ?, question_count = ?, time_limit = ? WHERE mode = ?',
+            [min_number, max_number, question_count, time_limit, mode]
+        );
+        res.json({ message: 'Settings updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
-            try {
-                // Toggle logic: get current status first or use bitwise NOT if supported, but let's be explicit
-                // Using a CASE statement or just fetching first. Let's use simplified update.
-                await db.query('UPDATE quiz_settings SET is_enabled = NOT is_enabled WHERE mode = ?', [mode]);
-                res.json({ message: 'Quiz mode toggled successfully' });
-            } catch (error) {
-                res.status(500).json({ error: 'Internal Server Error' });
-            }
-        };
+// Toggle quiz mode
+exports.toggleQuizMode = async (req, res) => {
+    const { mode } = req.params;
+
+    try {
+        await db.query('UPDATE quiz_settings SET is_enabled = NOT is_enabled WHERE mode = ?', [mode]);
+        res.json({ message: 'Quiz mode toggled successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

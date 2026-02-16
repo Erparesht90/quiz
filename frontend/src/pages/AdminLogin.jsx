@@ -13,8 +13,8 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            const res = await axios.post(`${API_URL}/admin/login`, { username, password });
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+            const res = await axios.post(`${API_URL}/admin.php/login`, { username, password });
 
             localStorage.setItem('adminToken', res.data.token);
             navigate('/admin/dashboard');

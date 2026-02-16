@@ -22,8 +22,8 @@ const QuizPage = () => {
         const fetchQuiz = async () => {
             try {
                 // Determine API URL based on environment or default
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-                const res = await axios.get(`${API_URL}/quiz/${mode}`);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+                const res = await axios.get(`${API_URL}/quiz.php/${mode}`);
                 setQuestions(res.data.questions);
                 setSettings({ timeLimit: res.data.time_limit });
                 setTimeLeft(res.data.time_limit);
@@ -94,8 +94,8 @@ const QuizPage = () => {
         // However, if TimeUp happened, score didn't change.
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            await axios.post(`${API_URL}/quiz/result`, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+            await axios.post(`${API_URL}/quiz.php/result`, {
                 mode,
                 score, // This might miss the LAST point if nextQuestion is called too fast? 
                 // No, handleAnswer updates state, then setTimeout(nextQuestion, 1500). 
