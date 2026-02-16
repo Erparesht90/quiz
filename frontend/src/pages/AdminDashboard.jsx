@@ -15,8 +15,8 @@ const AdminDashboard = () => {
             if (!token) return navigate('/admin/login');
 
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-                const res = await axios.get(`${API_URL}/admin/settings`, {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+                const res = await axios.get(`${API_URL}/admin.php/settings`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setSettings(res.data);
@@ -38,8 +38,8 @@ const AdminDashboard = () => {
     const handleToggle = async (mode) => {
         const token = localStorage.getItem('adminToken');
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            await axios.put(`${API_URL}/admin/toggle/${mode}`, {}, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+            await axios.put(`${API_URL}/admin.php/toggle/${mode}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -57,8 +57,8 @@ const AdminDashboard = () => {
     const handleSave = async () => {
         const token = localStorage.getItem('adminToken');
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-            await axios.put(`${API_URL}/admin/settings/${editingDetails.mode}`, editingDetails, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+            await axios.put(`${API_URL}/admin.php/settings/${editingDetails.mode}`, editingDetails, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
